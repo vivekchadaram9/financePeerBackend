@@ -44,13 +44,16 @@ app.get("/users/", async (request, response) => {
 });
 
 app.post("/users/", async (request, response) => {
-  const { userId, id, title, body } = request.body;
-  const postUserQuery = `
+  const file = request.body;
+  for (let i of file) {
+    const { userId, id, title, body } = i;
+    const postUserQuery = `
   INSERT INTO
     users (userId,id, title, body)
   VALUES
     (${userId}, '${id}', '${title}', '${body}');`;
-  await database.run(postUserQuery);
+    await database.run(postUserQuery);
+  }
   response.send("User Successfully Added");
 });
 
